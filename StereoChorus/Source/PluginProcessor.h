@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Chorus.h"
 
 //==============================================================================
 /**
@@ -53,7 +54,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    double pot1 = 1.0;
+    double pot2 = 1.0;
+    double pot3 = 1.0;
+    double pot4 = 1.0;
+    
 private:
+    
+    Chorus chorus;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoChorusAudioProcessor)
 };

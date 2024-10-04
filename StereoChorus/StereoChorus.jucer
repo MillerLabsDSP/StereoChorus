@@ -12,6 +12,16 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="KhfXIS" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{17C67A18-9D60-41F4-9E8C-1F18B25592D8}" name="DSP">
+      <FILE id="GTUKe3" name="FractionalDelay.cpp" compile="1" resource="0"
+            file="Source/FractionalDelay.cpp"/>
+      <FILE id="ZGzN7T" name="FractionalDelay.h" compile="0" resource="0"
+            file="Source/FractionalDelay.h"/>
+      <FILE id="MaruJx" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
+      <FILE id="kHZmjP" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
+      <FILE id="LflgRB" name="Chorus.cpp" compile="1" resource="0" file="Source/Chorus.cpp"/>
+      <FILE id="e1x6Db" name="Chorus.h" compile="0" resource="0" file="Source/Chorus.h"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

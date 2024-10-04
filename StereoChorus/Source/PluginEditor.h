@@ -14,7 +14,8 @@
 //==============================================================================
 /**
 */
-class StereoChorusAudioProcessorEditor  : public juce::AudioProcessorEditor
+class StereoChorusAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                            public juce::Slider::Listener
 {
 public:
     StereoChorusAudioProcessorEditor (StereoChorusAudioProcessor&);
@@ -23,11 +24,16 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void sliderValueChanged (juce::Slider * slider) override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+
     StereoChorusAudioProcessor& audioProcessor;
+    
+    juce::Slider pot1; // Rate
+    juce::Slider pot2; // Depth
+    juce::Slider pot3; // Delay
+    juce::Slider pot4; // Width
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoChorusAudioProcessorEditor)
 };
