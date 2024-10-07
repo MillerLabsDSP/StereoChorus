@@ -10,6 +10,10 @@
 
 #include "Chorus.h"
 
+Chorus::Chorus(juce::AudioProcessorValueTreeState vts) {
+    apvts = &vts;
+}
+
 void Chorus::prepareToPlay(double sampleRate, int bufferSize) {
     this->Fs = sampleRate;
     this->bufferSize = bufferSize;
@@ -28,7 +32,15 @@ void Chorus::setFracDepth(double depth) {
 
 void Chorus::setFracDelay(double delay) {
     this->delay = delay;
-    fd.setLFODelay(delay);
+    fd.setDelaySamples(delay);
+}
+
+void Chorus::setFracShape(double shape) {
+    fd.setLFOShape(shape);
+}
+
+void Chorus::setMix(double mix) {
+    this->mix = mix;
 }
 
 double Chorus::processSample(double input, const int channel) {

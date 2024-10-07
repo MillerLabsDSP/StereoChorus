@@ -15,45 +15,32 @@
 
 class LFO {
 public:
-    
-    enum SignalType {
-        Sine,
-        Cosine,
-        Square,
-        Triangle,
-        SineToTriangle,
-    };
 
     LFO() {};
-    LFO(SignalType signalType) : signalType(signalType) {};
     ~LFO() {};
     
-    float calculate(double rate, double depth, double delay, double phase, const int channel); // calculate periodic LFO values
+    float calculate(const int channel); // calculate periodic LFO values
 
     void setFs(double Fs);
     void setRate(double rate);
     void setDepth(double depth);
     void setDelay(double delay);
-    void setLFOType(SignalType signalType);
+    void setShape(double shape);
+    void setPhase(double phase);
 
 private:
     
     void updateClock(); // sample and hold only
-    
-    SignalType signalType;
-                
+                    
     double Fs = -1.0;
     double Ts = 1.0/Fs;
-    
-    double M_PI_X2 = M_PI * 2.0;
-             
+                 
     /* VAR INITIALIZERS */
     double angleChange, lfoValue, lfoValue_sin, lfoValue_tri;
-    double square, triangle;
-    std::array<double,2> currentAngle = { 0.f };
+    double sine, triangle;
+    double currentAngle[2] = { 0.0 };
 
-    double rate, delay, depth, mix;
+    double rate, delay, depth, shape, phase = M_PI;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFO)
-
 };

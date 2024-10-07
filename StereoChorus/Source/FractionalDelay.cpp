@@ -11,22 +11,9 @@
 #include "FractionalDelay.h"
 
 double FractionalDelay::processSample(double x, int channel) {
-    
     double lfoReturn, delayIn;
-    switch (lfoType) {
-        case Sine: case Square: case Triangle:
-            lfoReturn = lfo.calculate(rate, depth, offset, phase, channel);
-            delayIn = delaySamples + msToSamples(lfoReturn);
-            break;
-        case None:
-            lfoReturn = 0.0;
-            delayIn = delaySamples;
-            break;
-        default: // Sine, square, triangle
-            lfoReturn = lfo.calculate(rate, depth, offset, phase, channel);
-            delayIn = delaySamples + msToSamples(lfoReturn);
-            break;
-    }
+    lfoReturn = lfo.calculate(channel);
+    delayIn = delaySamples + msToSamples(lfoReturn);
     
     int d1 = std::floor(delayIn);
     int d2 = d1 + 1;
@@ -55,16 +42,11 @@ double FractionalDelay::processSample(double x, int channel) {
     }
         
     return y;
-    
 }
 
 void FractionalDelay::setFs(double Fs) {
     this->Fs = Fs;
     lfo.setFs(Fs);
-}
-
-void FractionalDelay::setLFOType(LFOType lfoType) {
-    this->lfoType = lfoType;
 }
 
 double FractionalDelay::msToSamples(double ms) {
@@ -73,8 +55,9 @@ double FractionalDelay::msToSamples(double ms) {
 
 void FractionalDelay::setDelaySamples(double delay) {
     if (inputType == Milliseconds) {
-        if (delaySamples <= MAX_BUFFER_SIZE || delaySamples >= 0.0) {
-            delaySamples = msToSamples(delay);
+        double delay_hold = msToSamples(delay);
+        if (delay_hold <= MAX_BUFFER_SIZE || delay_hold >= 0.0) {
+            delaySamples = delay_hold;
         }
     }
     if (inputType == Samples) {
@@ -94,7 +77,6 @@ void FractionalDelay::setLFODepth(double depth) {
     lfo.setDepth(depth);
 }
 
-void FractionalDelay::setLFODelay(double offset) {
-    this->offset = offset;
-    lfo.setDepth(offset);
+void FractionalDelay::setLFOShape(double shape) {
+    lfo.setShape(shape);
 }

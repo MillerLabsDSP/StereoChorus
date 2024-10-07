@@ -20,51 +20,36 @@ public:
         Samples,
         Milliseconds
     };
-    
-    enum LFOType {
-        Sine,
-        Square,
-        Triangle,
-        None
-    };
-    
-    FractionalDelay(InputType inputType, LFOType lfoType) : inputType(inputType), lfoType(lfoType) {};
+        
+    FractionalDelay() {};
     ~FractionalDelay() {};
     
     double processSample(double x, int channel);
 
     void setFs(double Fs);
-    void setLFOType(LFOType lfoType);
     void setDelaySamples(double delay);
     void setLFORate(double rate);
     void setLFODepth(double depth);
-    void setLFODelay(double delay);
+    void setLFOShape(double shape);
     
 private:
     
     void updateAngle(int channel);
     double msToSamples(double ms);
 
-    InputType inputType;
-    LFOType lfoType;
-    
     LFO lfo;
+    
+    InputType inputType;
     
     double Fs = -1.f;
             
-    // Delay buffer information
-    const int MAX_BUFFER_SIZE = 96000;
-    double delayBuffer[96000][2] = {0.f};
-    int index[2] = { 0 };
+    constexpr static int MAX_BUFFER_SIZE = 96000;
+    constexpr static int MAX_NUM_CHANNELS = 2;
+    double delayBuffer[MAX_BUFFER_SIZE][MAX_NUM_CHANNELS] = { 0.0 };
+    int index[MAX_NUM_CHANNELS] = { 0 };
     
-    double rate = 1.f;
-    double depth = 2.f;
-    double offset = 1.f;
-    double phase = 0.f;
-    
+    double rate, depth, delay, phase;
     int delaySamples = 0;
     
-    double noiseMix = 0.05f;
-    double gamma = 0.f;
-    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FractionalDelay)
 };

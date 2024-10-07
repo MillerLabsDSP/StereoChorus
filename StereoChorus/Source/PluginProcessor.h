@@ -54,15 +54,16 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    double pot1 = 1.0;
-    double pot2 = 1.0;
-    double pot3 = 1.0;
-    double pot4 = 1.0;
-    
 private:
     
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::AudioProcessorValueTreeState apvts { *this, nullptr, "Parameters", createParameterLayout() };
+        
     Chorus chorus;
     
+    constexpr static int NUM_PARAMS = 6;
+    std::vector<float> param_values = { 0.f };
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoChorusAudioProcessor)
 };

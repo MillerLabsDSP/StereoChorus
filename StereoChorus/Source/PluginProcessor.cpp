@@ -28,6 +28,41 @@ StereoChorusAudioProcessor::~StereoChorusAudioProcessor()
 {
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout StereoChorusAudioProcessor::createParameterLayout() {
+    juce::AudioProcessorValueTreeState::ParameterLayout parameters;
+    
+    juce::NormalisableRange<float> range_freq (0.5f, 15.f, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"FREQ", 1},
+                                                                 "Frequency",
+                                                                 range_freq,
+                                                                 1.0f));
+    
+    juce::NormalisableRange<float> range_depth (0.f, 2.f, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"DEPTH", 2},
+                                                                 "Depth",
+                                                                 range_depth,
+                                                                 1.0f));
+    
+    juce::NormalisableRange<float> range_delay (20.f, 40.f, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"DELAY", 3},
+                                                                 "Delay",
+                                                                 range_delay,
+                                                                 30.f));
+            
+    juce::NormalisableRange<float> range_shape (0.f, 1.f, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"SHAPE", 4},
+                                                                 "Shape",
+                                                                range_shape,
+                                                                 1.0f));
+    juce::NormalisableRange<float> range_mix (0.f, 1.f, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"MIX", 6},
+                                                                 "Mix",
+                                                                range_mix,
+                                                                 1.0f));
+        
+    return parameters;
+}
+
 //==============================================================================
 const juce::String StereoChorusAudioProcessor::getName() const
 {
@@ -93,6 +128,7 @@ void StereoChorusAudioProcessor::changeProgramName (int index, const juce::Strin
 //==============================================================================
 void StereoChorusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    for (int i = 0; i < NUM_PARAMS - 1; ++i) { param_values.push_back(0); }
     chorus.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
@@ -137,13 +173,20 @@ void StereoChorusAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    const int bufferSize = buffer.getNumSamples();
+    param_values[0] = apvts.getRawParameterValue("FREQ")->load();
+    param_values[1] = apvts.getRawParameterValue("DEPTH")->load();
+    param_values[2] = apvts.getRawParameterValue("DELAY")->load();
+    param_values[3] = apvts.getRawParameterValue("SHAPE")->load();
+    param_values[5] = apvts.getRawParameterValue("MIX")->load();
+//    param_values[4] = apvts.getRawParameterValue("STEREO")->load();
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel) {
         
-        chorus.setFracRate(pot1);
-        chorus.setFracDepth(pot2);
-        chorus.setFracDelay(pot3);
+        chorus.setFracRate(param_values[0]);
+        chorus.setFracDepth(param_values[1]);
+        chorus.setFracDelay(param_values[2]);
+        chorus.setFracShape(param_values[3]);
+        chorus.setMix(param_values[5]);
         
         chorus.processBuffer(buffer);
         
@@ -158,7 +201,9 @@ bool StereoChorusAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* StereoChorusAudioProcessor::createEditor()
 {
-    return new StereoChorusAudioProcessorEditor (*this);
+//    return new StereoChorusAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
+
 }
 
 //==============================================================================

@@ -14,8 +14,7 @@
 //==============================================================================
 /**
 */
-class StereoChorusAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                            public juce::Slider::Listener
+class StereoChorusAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
     StereoChorusAudioProcessorEditor (StereoChorusAudioProcessor&);
@@ -24,16 +23,10 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged (juce::Slider * slider) override;
 
 private:
 
     StereoChorusAudioProcessor& audioProcessor;
     
-    juce::Slider pot1; // Rate
-    juce::Slider pot2; // Depth
-    juce::Slider pot3; // Delay
-    juce::Slider pot4; // Width
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoChorusAudioProcessorEditor)
 };

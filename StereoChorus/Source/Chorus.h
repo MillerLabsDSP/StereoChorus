@@ -17,6 +17,7 @@
 class Chorus {
 public:
     
+    Chorus(juce::AudioProcessorValueTreeState);
     Chorus() {};
     ~Chorus() {};
     
@@ -28,10 +29,14 @@ public:
     void setFracRate(double rate);
     void setFracDepth(double depth);
     void setFracDelay(double delay);
-    
+    void setFracShape(double shape);
+    void setMix(double mix);
+
 private:
-        
-    FractionalDelay fd { FractionalDelay::InputType::Milliseconds, FractionalDelay::LFOType::Sine };
+    
+    juce::AudioProcessorValueTreeState* apvts = nullptr;
+
+    FractionalDelay fd;
     
     double Fs = -1.0;
     int bufferSize = -1;
