@@ -43,6 +43,10 @@ void Chorus::setMix(double mix) {
     this->mix = mix;
 }
 
+void Chorus::setPhase(double phase) {
+    fd.setLFOPhase(phase);
+}
+
 double Chorus::processSample(double input, const int channel) {
     output = fd.processSample(input, channel);
     return (1-mix) * input + mix * output;

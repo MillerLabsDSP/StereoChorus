@@ -60,6 +60,8 @@ private:
     juce::AudioProcessorValueTreeState apvts { *this, nullptr, "Parameters", createParameterLayout() };
         
     Chorus chorus;
+//    LFO lfo; // debug only
+//    FractionalDelay fd;
     
     constexpr static int NUM_PARAMS = 6;
     std::vector<float> param_values = { 0.f };

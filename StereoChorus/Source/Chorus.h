@@ -31,6 +31,7 @@ public:
     void setFracDelay(double delay);
     void setFracShape(double shape);
     void setMix(double mix);
+    void setPhase(double phase);
 
 private:
     

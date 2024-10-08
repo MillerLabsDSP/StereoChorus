@@ -54,11 +54,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout StereoChorusAudioProcessor::
                                                                  "Shape",
                                                                 range_shape,
                                                                  1.0f));
+    
     juce::NormalisableRange<float> range_mix (0.f, 1.f, 0.001f);
-    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"MIX", 6},
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"MIX", 5},
                                                                  "Mix",
                                                                 range_mix,
                                                                  1.0f));
+        
+    juce::NormalisableRange<float> range_stereo (0.f, M_PI, 0.001f);
+    parameters.add(std::make_unique<juce::AudioParameterFloat> (juce::ParameterID {"STEREO", 6},
+                                                                 "Stereo",
+                                                                range_stereo,
+                                                                 0.f));
         
     return parameters;
 }
@@ -129,6 +136,8 @@ void StereoChorusAudioProcessor::changeProgramName (int index, const juce::Strin
 void StereoChorusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     for (int i = 0; i < NUM_PARAMS - 1; ++i) { param_values.push_back(0); }
+//    lfo.setFs(sampleRate);
+//    fd.setFs(sampleRate);
     chorus.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
@@ -173,24 +182,22 @@ void StereoChorusAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    param_values[0] = apvts.getRawParameterValue("FREQ")->load();
-    param_values[1] = apvts.getRawParameterValue("DEPTH")->load();
-    param_values[2] = apvts.getRawParameterValue("DELAY")->load();
-    param_values[3] = apvts.getRawParameterValue("SHAPE")->load();
-    param_values[5] = apvts.getRawParameterValue("MIX")->load();
-//    param_values[4] = apvts.getRawParameterValue("STEREO")->load();
-
-    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
+        param_values[0] = apvts.getRawParameterValue("FREQ")->load();
+        param_values[1] = apvts.getRawParameterValue("DEPTH")->load();
+        param_values[2] = apvts.getRawParameterValue("DELAY")->load();
+        param_values[3] = apvts.getRawParameterValue("SHAPE")->load();
+        param_values[4] = apvts.getRawParameterValue("MIX")->load();
+        param_values[5] = apvts.getRawParameterValue("STEREO")->load();
         
         chorus.setFracRate(param_values[0]);
         chorus.setFracDepth(param_values[1]);
         chorus.setFracDelay(param_values[2]);
         chorus.setFracShape(param_values[3]);
-        chorus.setMix(param_values[5]);
+        chorus.setMix(param_values[4]);
+        chorus.setPhase(param_values[5]);
         
         chorus.processBuffer(buffer);
-        
-    }
+                
 }
 
 //==============================================================================

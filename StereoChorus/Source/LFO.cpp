@@ -13,8 +13,9 @@
 float LFO::calculate(const int channel) {
     angleChange = rate * Ts * 2 * M_PI;
     
-    sine = depth * std::sin(currentAngle[channel] + phase) + delay;
-    triangle = depth * (-std::acos(std::sin(currentAngle[channel] + phase)) / M_PI_2 + 1) + delay;
+    double phaseIn = (channel == 0) ? 0 : phase;
+    sine = depth * std::sin(currentAngle[channel] + phaseIn);
+    triangle = depth * (-std::acos(std::sin(currentAngle[channel] + phaseIn)) / M_PI_2 + 1);
     
     currentAngle[channel] += angleChange;
     if (currentAngle[channel] > 2 * M_PI) {
@@ -35,10 +36,6 @@ void LFO::setRate(double rate) {
 
 void LFO::setDepth(double depth) {
     this->depth = depth;
-}
-
-void LFO::setDelay(double delay) {
-    this->delay = delay;
 }
 
 void LFO::setShape(double shape) {

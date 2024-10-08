@@ -14,7 +14,7 @@ double FractionalDelay::processSample(double x, int channel) {
     double lfoReturn, delayIn;
     lfoReturn = lfo.calculate(channel);
     delayIn = delaySamples + msToSamples(lfoReturn);
-    
+
     int d1 = std::floor(delayIn);
     int d2 = d1 + 1;
     double g2 = delayIn - (double)d1;
@@ -79,4 +79,8 @@ void FractionalDelay::setLFODepth(double depth) {
 
 void FractionalDelay::setLFOShape(double shape) {
     lfo.setShape(shape);
+}
+
+void FractionalDelay::setLFOPhase(double phase) {
+    lfo.setPhase(phase);
 }

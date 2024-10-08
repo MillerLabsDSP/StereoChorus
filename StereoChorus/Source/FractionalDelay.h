@@ -31,6 +31,7 @@ public:
     void setLFORate(double rate);
     void setLFODepth(double depth);
     void setLFOShape(double shape);
+    void setLFOPhase(double phase);
     
 private:
     
@@ -38,8 +39,7 @@ private:
     double msToSamples(double ms);
 
     LFO lfo;
-    
-    InputType inputType;
+    InputType inputType = Milliseconds;
     
     double Fs = -1.f;
             
